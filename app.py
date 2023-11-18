@@ -6,6 +6,64 @@ app = Flask(__name__)
 # secret key for session
 app.secret_key = 'TODO: Set Secret Key'
 
+from flask import request
+
+@app.route('/display-books/<genre>', methods=['GET'])
+def display_books(genre):
+    db_executor = DatabaseExecutor()
+
+    # Get books by genre
+    books = db_executor.get_books_by_genre(genre)
+
+    # Sorting parameters
+    sort_by = request.args.get('sort_by', 'title')
+    order = request.args.get('order', 'asc')
+
+    # Sort the books based on the selected criteria
+    if sort_by == 'title':
+        books.sort(key=lambda x: x.title)
+    elif sort_by == 'price':
+        # Change the sorting logic for 'price' to handle numerical values
+        books.sort(key=lambda x: float(x.price))
+
+    # Handle descending order
+    if order == 'desc':
+        books.reverse()
+
+    books_data = [{'img': book.img, 'title': book.title, 'author': book.author, 'price': book.price} for book in books]
+
+    return render_template("display-books.html", genre_page=genre, books=books_data, sort_by=sort_by, order=order)
+
+# ...
+
+@app.route('/display-accessories', methods=['GET'])
+def display_accessories():
+    db_executor = DatabaseExecutor()
+
+    # Get accessories
+    accessories = db_executor.get_accessories()
+
+    # Sorting parameters
+    sort_by = request.args.get('sort_by', 'title')
+    order = request.args.get('order', 'asc')
+
+    # Sort the accessories based on the selected criteria
+    if sort_by == 'title':
+        accessories.sort(key=lambda x: x.item_name)
+    elif sort_by == 'price':
+        # Change the sorting logic for 'price' to handle numerical values
+        accessories.sort(key=lambda x: float(x.price))
+
+    # Handle descending order
+    if order == 'desc':
+        accessories.reverse()
+
+    accessories_data = [{'img': accessory.img, 'item_name': accessory.item_name, 'price': accessory.price} for accessory in accessories]
+
+    return render_template("display-accessories.html", genre_page="Accessories", accessories=accessories_data, sort_by=sort_by, order=order)
+
+
+
 @app.route('/')
 def home_page():
     # this would be the websites home page

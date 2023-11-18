@@ -2,6 +2,27 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>{{ genre_page}}</h2>
+
+<div class="sorting-options">
+    <form action="{{ url_for('display_accessories') }}" method="get">
+        <label for="sort-by">Sort by:</label>
+        <select id="sort-by" name="sort_by">
+            <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+            <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Price</option>
+        </select>
+        <label for="order">Order:</label>
+        <select id="order" name="order">
+            <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascending</option>
+            <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+
+
+</div>
+
+
+
 <div class="content">
     <!-- For loop printing out book containers-->
     {% for accessory in accessories %}
