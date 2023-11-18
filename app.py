@@ -8,6 +8,8 @@ app.secret_key = 'TODO: Set Secret Key'
 
 from flask import request
 
+# ...
+
 @app.route('/display-books/<genre>', methods=['GET'])
 def display_books(genre):
     db_executor = DatabaseExecutor()
@@ -61,6 +63,9 @@ def display_accessories():
     accessories_data = [{'img': accessory.img, 'item_name': accessory.item_name, 'price': accessory.price} for accessory in accessories]
 
     return render_template("display-accessories.html", genre_page="Accessories", accessories=accessories_data, sort_by=sort_by, order=order)
+
+# ...
+
 
 
 
